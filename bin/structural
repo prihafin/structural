@@ -1,0 +1,44 @@
+#!/usr/bin/env node
+
+let structural = require('../lib/structural');
+let fs = require('fs');
+let path = require('path');
+let nopt = require('nopt');
+let util = require("util");
+
+/**
+ * remove extension from a filename
+ * @param {String} fn - the filename
+ * @returns {String} the filename without extension
+ */
+function removeExtension(fn) {
+  let i = fn.lastIndexOf(".");
+  if(i<0) return fn;
+  return fn.slice(0, i);
+}
+
+try {
+  let args = nopt({"out": String, "language": String}, {"o":"--out", "l":"--language"}, process.argv, 2);
+  let input = args.argv.remain[0];
+  if(args.language===undefined) args.language = "js";
+  if(args.out===undefined) args.out = removeExtension(input)+"."+args.language;
+
+  let lang = require("../lib/language.js");
+  let text = fs.readFileSync(input, "utf-8");
+
+  let output = lang.parse(text, {actions:new structural.Actions()});
+
+  let builder = require("../lib/builder-"+args.language);
+
+  let res = builder.build(input, output);
+
+  let outobj = util.inspect(output, false, null, true);
+
+  fs.writeFileSync(args.out, res);
+
+  console.log("output written to "+args.out);
+} catch (e) {
+  console.error(e.message);
+  console.error(e.stack);
+  process.exit(1);
+}

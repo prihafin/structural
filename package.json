@@ -1,0 +1,25 @@
+{
+  "name": "structural",
+  "version": "1.0.0",
+  "description": "codegeneration to read and write structured binary data described by c-ish declarations",
+  "main": "./lib/structural.js",
+  "bin":{
+    "structural":"./bin/structural"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "http://asseri@172.17.6.254/asseri/structural.git"
+  },
+  "keywords": [
+    "codegeneration",
+    "binary"
+  ],
+  "author": "Asseri Lintanen",
+  "license": "ISC",
+  "dependencies": {
+    "nopt": "^4.0.1"
+  }
+}

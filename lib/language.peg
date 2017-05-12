@@ -1,0 +1,33 @@
+grammar TEST2
+
+content   <- decls
+decls     <- (ws? constdecl / ws? structdecl / ws? comment1)* %decls
+
+comment1  <- "//" [ a-zA-Z0-9_,.;:+!"#¤%&/(){}\[\]=\t*]* [\n\r]*
+
+comment2  <- "/*" [ a-zA-Z0-9_,.;:+!"#¤%&(){}\[\]=\n\r\t]* "*/"
+
+constdecl  <- const decl eq (string / ident / number) eol %constdecl
+
+structdecl <- struct ident ws "{" ws? fields ws? "}" ws? %structdecl
+fields     <- ws? (field / switch)+ ws?
+field      <- decl ("[" (number / ident) "]" ws ident)? ws? default:default? eol ws? comment1? ws? %field
+default    <- "=" ws? (string / number / hex)
+
+switch     <- ws? "switch" ws? "(" ident ")" ws? "{" ws? case* ws? "}" eol ws? %switch
+case       <- ws? "case" ws number ":" ws? (fields / break)+ ws? %case
+
+break     <- "break;" %null
+decl      <- list ws? %decl
+list      <- ident ws? list?
+struct    <- "struct" ws %null
+const     <- "const" ws %null
+eq        <- ws? "=" ws? %null
+eol       <- ws? ";" %null
+ws        <- [\n\r\t ]+ %null
+
+ident     <- [A-Za-z_] [A-Za-z0-9_]*
+string    <- "\"" [^"]* "\"" %string
+number    <- (hex / num)
+num       <- [0-9]+ ("." [0-9]+)? %number
+hex       <- "0x" [0-9a-fA-F]+ %number
