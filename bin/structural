@@ -4,7 +4,6 @@ let structural = require('../lib/structural');
 let fs = require('fs');
 let path = require('path');
 let nopt = require('nopt');
-let util = require("util");
 
 /**
  * remove extension from a filename
@@ -31,8 +30,6 @@ try {
   let builder = require("../lib/builder-"+args.language);
 
   let res = builder.build(input, output);
-
-  let outobj = util.inspect(output, false, null, true);
 
   fs.writeFileSync(args.out, res);
 
