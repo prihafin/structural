@@ -1,11 +1,14 @@
-# install with
+# structural
+library to unify binary format declarations to a single c-like syntax
+
+## install with
 <pre>npm install git+http://address/asseri/structural -g</pre>
 - note the -g to install it as global
 
-# usage
+## usage
 <pre>structural input.h [--out filename.js]</pre>
 
-# supported datatypes
+## supported datatypes
 
 - <code>[unsigned] char</code> one byte integer
 - <code>[unsigned] short int</code> two byte integer
@@ -25,7 +28,7 @@
 - <code>"struct name"</code> embedded structure
 - <code>"switch(fieldname)"</code> conditional fields
 
-# example
+## example
 
 ```c
 struct simple {
