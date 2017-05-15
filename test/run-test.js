@@ -31,7 +31,7 @@ s.value2 = 11;
 s.strvalue = "hellöy";
 s.last = 12;
 
-s.write(data);
+test.TestResult.write(s, data);
 
 console.log(data);
 
