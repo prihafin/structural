@@ -1,6 +1,6 @@
 # install with
-npm install git+http://address/asser/structural -g
+<pre>npm install git+http://address/asseri/structural -g</pre>
 - note the -g to install it as global
 
 # usage
-structural input.h [--out filename.js]
+<pre>structural input.h [--out filename.js]</pre>
