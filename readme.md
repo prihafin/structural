@@ -28,10 +28,9 @@
 # example
 
 ```c
-
 struct simple {
-  unsigned int24; unsigned 3 byte string;
-  long int; signed 8 byte string;
+  unsigned int24; // unsigned 3 byte string;
+  long int; // signed 8 byte string;
 }
 
 struct demo {
