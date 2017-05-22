@@ -1,5 +1,7 @@
 const int rawr = 1;
 
+alias boo uint8_t;
+
 typedef enum
 {
   a = 11,
@@ -7,7 +9,7 @@ typedef enum
 } TestEnum1;
 
 typedef struct {
-  int value1;
+  boo value1;
   int value2;
   string strvalue;
 

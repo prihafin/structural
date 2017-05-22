@@ -1,7 +1,7 @@
 grammar TEST2
 
 content   <- decls
-decls     <- (ws? constdecl / ws? typedefstructdecl / ws? structdecl / ws? typedefenumdecl / ws? enumdecl / ws? comment1)* %decls
+decls     <- (ws? aliasdecl / ws? constdecl / ws? typedefstructdecl / ws? structdecl / ws? typedefenumdecl / ws? enumdecl / ws? comment1)* %decls
 
 comment1  <- "//" [ a-zA-Z0-9_,.;:+!"#¤%&/(){}\[\]=\t*]* [\n\r]*
 
@@ -15,6 +15,8 @@ structfields      <- ws? (structfield / switch)+ ws?
 structfield       <- decl ("[" (number / ident) "]" ws ident)? ws? default:default? ws? eol ws? comment1? ws? %structfield
 default           <- "=" ws? (string / number / hex)
 
+aliasdecl       <- alias ws ident ws? ident ws? eol %aliasdecl
+
 typedefenumdecl <- typedefenum ws ident? ws? "{" ws? enumfields ws? "}" ws? ident ws? eol ws? %typedefenumdecl
 enumdecl        <- enum ws ident? ws? "{" ws? enumfields ws? "}" ws? eol ws? %enumdecl
 enumfields      <- ws? (enumfield)+ ws?
@@ -26,6 +28,7 @@ case       <- ws? "case" ws number ":" ws? (structfields / break)+ ws? %case
 decl           <- list ws? %decl
 list           <- ident ws? list?
 
+alias          <- "alias" %null
 break          <- "break;" %null
 struct         <- "struct" %null
 typedefstruct  <- "typedef struct" %null
