@@ -20,7 +20,6 @@ function readUIntVar(buf, offset) {
  */
 function writeUIntVar(buf, offset, value) {
   if(value<128) {
-    console.log("byte!");
     buf.writeUInt8(value & 0x7f, offset);
     return offset+1;
   }
