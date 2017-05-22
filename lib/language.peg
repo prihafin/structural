@@ -1,7 +1,7 @@
 grammar TEST2
 
 content   <- decls
-decls     <- (ws? constdecl / ws? structdecl / ws? typedefenumdecl / ws? enumdecl / ws? comment1)* %decls
+decls     <- (ws? constdecl / ws? typedefstructdecl / ws? structdecl / ws? typedefenumdecl / ws? enumdecl / ws? comment1)* %decls
 
 comment1  <- "//" [ a-zA-Z0-9_,.;:+!"#¤%&/(){}\[\]=\t*]* [\n\r]*
 
@@ -9,15 +9,16 @@ comment2  <- "/*" [ a-zA-Z0-9_,.;:+!"#¤%&(){}\[\]=\n\r\t]* "*/"
 
 constdecl  <- const decl eq (string / ident / number) eol %constdecl
 
-structdecl   <- struct ws ident ws "{" ws? structfields ws? "}" ws? eol ws? %structdecl
-structfields <- ws? (structfield / switch)+ ws?
-structfield  <- decl ("[" (number / ident) "]" ws ident)? ws? default:default? ws? eol ws? comment1? ws? %structfield
-default      <- "=" ws? (string / number / hex)
+typedefstructdecl <- typedefstruct ws ident? ws? "{" ws? structfields ws? "}" ws? ident? ws? eol ws? %typedefstructdecl
+structdecl        <- struct ws ident ws? "{" ws? structfields ws? "}" ws? eol ws? %structdecl
+structfields      <- ws? (structfield / switch)+ ws?
+structfield       <- decl ("[" (number / ident) "]" ws ident)? ws? default:default? ws? eol ws? comment1? ws? %structfield
+default           <- "=" ws? (string / number / hex)
 
-typedefenumdecl  <- typedefenum ws ident? ws? "{" ws? enumfields ws? "}" ws? ident ws? eol ws? %typedefenumdecl
-enumdecl   <- enum ws ident? ws? "{" ws? enumfields ws? "}" ws? eol ws? %enumdecl
-enumfields <- ws? (enumfield)+ ws?
-enumfield  <- ident eq (string / number / hex) ws? comma? ws? comment1? ws? %enumfield
+typedefenumdecl <- typedefenum ws ident? ws? "{" ws? enumfields ws? "}" ws? ident ws? eol ws? %typedefenumdecl
+enumdecl        <- enum ws ident? ws? "{" ws? enumfields ws? "}" ws? eol ws? %enumdecl
+enumfields      <- ws? (enumfield)+ ws?
+enumfield       <- ident eq (string / number / hex) ws? comma? ws? comment1? ws? %enumfield
 
 switch     <- ws? "switch" ws? "(" ident ")" ws? "{" ws? case* ws? "}" eol ws? %switch
 case       <- ws? "case" ws number ":" ws? (structfields / break)+ ws? %case

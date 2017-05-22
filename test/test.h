@@ -6,7 +6,7 @@ typedef enum
   b = "boobaa"
 } TestEnum1;
 
-struct TestResult {
+typedef struct {
   int value1;
   int value2;
   string strvalue;
@@ -22,7 +22,7 @@ struct TestResult {
   };
 
   int last;
-};
+} TestResult;
 
 enum TestEnum2 {
   a = 11,
