@@ -1,5 +1,7 @@
+const int rawr = 1;
 
-typedef enum {
+typedef enum
+{
   a = 11,
   b = "boobaa"
 } TestEnum1;
