@@ -1,7 +1,7 @@
 grammar TEST2
 
 content   <- decls
-decls     <- (ws? constdecl / ws? structdecl / ws? comment1)* %decls
+decls     <- (ws? constdecl / ws? structdecl / ws? enumdecl / ws? comment1)* %decls
 
 comment1  <- "//" [ a-zA-Z0-9_,.;:+!"#¤%&/(){}\[\]=\t*]* [\n\r]*
 
@@ -9,22 +9,31 @@ comment2  <- "/*" [ a-zA-Z0-9_,.;:+!"#¤%&(){}\[\]=\n\r\t]* "*/"
 
 constdecl  <- const decl eq (string / ident / number) eol %constdecl
 
-structdecl <- struct ident ws "{" ws? fields ws? "}" ws? %structdecl
-fields     <- ws? (field / switch)+ ws?
-field      <- decl ("[" (number / ident) "]" ws ident)? ws? default:default? eol ws? comment1? ws? %field
-default    <- "=" ws? (string / number / hex)
+structdecl   <- (typedefstruct / struct) ident ws "{" ws? structfields ws? "}" ws? %structdecl
+structfields <- ws? (structfield / switch)+ ws?
+structfield  <- decl ("[" (number / ident) "]" ws ident)? ws? default:default? eol ws? comment1? ws? %structfield
+default      <- "=" ws? (string / number / hex)
+
+enumdecl   <- (typedefenum / enum) ident ws "{" ws? enumfields ws? "}" ws? %enumdecl
+enumfields <- ws? (enumfield)+ ws?
+enumfield  <- ident eq (string / number / hex) ws? comma? ws? comment1? ws? %enumfield
 
 switch     <- ws? "switch" ws? "(" ident ")" ws? "{" ws? case* ws? "}" eol ws? %switch
-case       <- ws? "case" ws number ":" ws? (fields / break)+ ws? %case
+case       <- ws? "case" ws number ":" ws? (structfields / break)+ ws? %case
 
-break     <- "break;" %null
-decl      <- list ws? %decl
-list      <- ident ws? list?
-struct    <- "struct" ws %null
-const     <- "const" ws %null
-eq        <- ws? "=" ws? %null
-eol       <- ws? ";" %null
-ws        <- [\n\r\t ]+ %null
+decl           <- list ws? %decl
+list           <- ident ws? list?
+
+break          <- "break;" %null
+struct         <- "struct" ws %null
+typedefstruct  <- "typedef struct" ws %null
+enum           <- "enum" ws %null
+typedefenum    <- "typedef enum" ws %null
+const          <- "const" ws %null
+eq             <- ws? "=" ws? %null
+eol            <- ws? ";" %null
+comma          <- ws? "," %null
+ws             <- [\n\r\t ]+ %null
 
 ident     <- [A-Za-z_] [A-Za-z0-9_]*
 string    <- "\"" [^"]* "\"" %string

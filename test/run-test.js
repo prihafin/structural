@@ -12,11 +12,13 @@ let lang = require("../lib/language.js");
 let text = fs.readFileSync(input, "utf-8");
 
 let output = lang.parse(text, {actions:new structural.Actions()});
+console.log(output);
+
 
 let builder = require("../lib/builder-js");
 let res = builder.build(input, output);
 
-console.log(res);
+//console.log(res);
 
 fs.writeFileSync(out, res);
 
