@@ -1,10 +1,10 @@
 
-typedef enum TestEnum1 {
+typedef enum {
   a = 11,
   b = "boobaa"
-}
+} TestEnum1;
 
-typedef struct TestResult {
+struct TestResult {
   int value1;
   int value2;
   string strvalue;
@@ -20,9 +20,9 @@ typedef struct TestResult {
   };
 
   int last;
-}
+};
 
 enum TestEnum2 {
   a = 11,
   b = "boobaa"
-}
+};

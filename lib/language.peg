@@ -1,7 +1,7 @@
 grammar TEST2
 
 content   <- decls
-decls     <- (ws? constdecl / ws? structdecl / ws? enumdecl / ws? comment1)* %decls
+decls     <- (ws? constdecl / ws? structdecl / ws? typedefenumdecl / ws? enumdecl / ws? comment1)* %decls
 
 comment1  <- "//" [ a-zA-Z0-9_,.;:+!"#¤%&/(){}\[\]=\t*]* [\n\r]*
 
@@ -9,12 +9,13 @@ comment2  <- "/*" [ a-zA-Z0-9_,.;:+!"#¤%&(){}\[\]=\n\r\t]* "*/"
 
 constdecl  <- const decl eq (string / ident / number) eol %constdecl
 
-structdecl   <- (typedefstruct / struct) ident ws "{" ws? structfields ws? "}" ws? %structdecl
+structdecl   <- struct ws ident ws "{" ws? structfields ws? "}" ws? eol ws? %structdecl
 structfields <- ws? (structfield / switch)+ ws?
-structfield  <- decl ("[" (number / ident) "]" ws ident)? ws? default:default? eol ws? comment1? ws? %structfield
+structfield  <- decl ("[" (number / ident) "]" ws ident)? ws? default:default? ws? eol ws? comment1? ws? %structfield
 default      <- "=" ws? (string / number / hex)
 
-enumdecl   <- (typedefenum / enum) ident ws "{" ws? enumfields ws? "}" ws? %enumdecl
+typedefenumdecl  <- typedefenum ws ident? ws? "{" ws? enumfields ws? "}" ws? ident ws? eol ws? %typedefenumdecl
+enumdecl   <- enum ws ident? ws? "{" ws? enumfields ws? "}" ws? eol ws? %enumdecl
 enumfields <- ws? (enumfield)+ ws?
 enumfield  <- ident eq (string / number / hex) ws? comma? ws? comment1? ws? %enumfield
 
@@ -25,10 +26,10 @@ decl           <- list ws? %decl
 list           <- ident ws? list?
 
 break          <- "break;" %null
-struct         <- "struct" ws %null
-typedefstruct  <- "typedef struct" ws %null
-enum           <- "enum" ws %null
-typedefenum    <- "typedef enum" ws %null
+struct         <- "struct" %null
+typedefstruct  <- "typedef struct" %null
+enum           <- "enum" %null
+typedefenum    <- "typedef enum" %null
 const          <- "const" ws %null
 eq             <- ws? "=" ws? %null
 eol            <- ws? ";" %null
