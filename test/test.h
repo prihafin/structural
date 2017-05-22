@@ -9,6 +9,11 @@ typedef enum
 } TestEnum1;
 
 typedef struct {
+  uint32_t v1 = 1;
+  varint v2 = 1;
+} test;
+
+typedef struct {
   boo value1;
   int value2;
   string strvalue;

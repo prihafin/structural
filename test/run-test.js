@@ -4,6 +4,7 @@ let structural = require('../lib/structural');
 let fs = require('fs');
 let path = require('path');
 let util = require("util");
+let du = require("../res/datautils");
 
 let input = "test.h";
 let out = "test.js";
@@ -26,19 +27,40 @@ let test = require("./test");
 
 let data = new Buffer("\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff", "ASCII");
 
-let s = test.TestResult.new();
+let s = test.test.new();
 
-s.value1 = 10;
-s.value2 = 11;
-s.strvalue = "hellöy";
-s.last = 12;
 
-test.TestResult.write(s, data);
+
+test.test.write(s, data);
 
 console.log(data);
 
-s = test.TestResult.read(data, 0);
+s = test.test.read(data, 0);
 
 console.log(s);
 
+data.fill(0xff);
 
+function readUIntVar(buf, offset) {
+  let i = 0;
+  let v = 0x80;
+  let a = [];
+
+  while(((i===0) || (i<5)) && ((v & 0x80)===128)) {
+    a.unshift(v = buf.readUInt8(offset));
+    offset++; i++;
+  }
+  let res = 0;
+  i = 0;
+  for(let v of a) {
+    res += ((v & 0x7f) << i++*7);
+  }
+  return [res, offset];
+}
+
+
+let len = writeUIntVar(data, 0, 123000);
+
+console.log(len, data);
+
+console.log(readUIntVar(data, 0));

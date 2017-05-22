@@ -25,29 +25,29 @@ function writeUIntVar(buf, offset, value) {
     return offset+1;
   }
   if(value<16384) {
-    buf.writeUInt8(value & 0x7f, offset);
-    buf.writeUInt8((value >>> 7) & 0x7f, offset+1);
-    return offset+2;
+    buf.writeUInt8((value >>> 7) & 0x7f | 0x80, offset++);
+    buf.writeUInt8(value & 0x7f, offset++);
+    return offset;
   }
   if(value<2097152) {
-    buf.writeUInt8(value & 0x7f, offset);
-    buf.writeUInt8(value >>> 7 & 0x7f, offset+1);
-    buf.writeUInt8(value >>> 14 & 0x7f | 0x80, offset+2);
-    return offset+3;
+    buf.writeUInt8(value >>> 14 & 0x7f | 0x80, offset++);
+    buf.writeUInt8(value >>> 7 & 0x7f | 0x80, offset++);
+    buf.writeUInt8(value & 0x7f, offset++);
+    return offset;
   }
   if(value<268435456) {
-    buf.writeUInt8(value & 0x7f, offset);
-    buf.writeUInt8(value >>> 7 & 0x7f | 0x80, offset+1);
-    buf.writeUInt8(value >>> 14 & 0x7f | 0x80, offset+2);
-    buf.writeUInt8(value >>> 21 & 0x7f | 0x80, offset+3);
-    return offset+4;
+    buf.writeUInt8(value >>> 21 & 0x7f | 0x80, offset++);
+    buf.writeUInt8(value >>> 14 & 0x7f | 0x80, offset++);
+    buf.writeUInt8(value >>> 7 & 0x7f | 0x80, offset++);
+    buf.writeUInt8(value & 0x7f, offset++);
+    return offset;
   }
-  buf.writeUInt8(value & 0x7f, offset);
-  buf.writeUInt8(value >>> 7 & 0x7f | 0x80, offset+1);
-  buf.writeUInt8(value >>> 14 & 0x7f | 0x80, offset+2);
-  buf.writeUInt8(value >>> 21 & 0x7f | 0x80, offset+3);
-  buf.writeUInt8(value >>> 28 & 0x7f | 0x80, offset+4);
-  return offset+5;
+  buf.writeUInt8(value >>> 28 & 0x7f | 0x80, offset++);
+  buf.writeUInt8(value >>> 21 & 0x7f | 0x80, offset++);
+  buf.writeUInt8(value >>> 14 & 0x7f | 0x80, offset++);
+  buf.writeUInt8(value >>> 7 & 0x7f | 0x80, offset++);
+  buf.writeUInt8(value & 0x7f, offset++);
+  return offset;
 }
 
 function readString(buf, offset, size, encoding="utf-8") {
