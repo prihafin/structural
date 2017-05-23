@@ -5,6 +5,27 @@ let fs = require('fs');
 let path = require('path');
 let nopt = require('nopt');
 
+function processDefines(text) {
+  let defines = [];
+  text = text.split("\n");
+  text = text.filter((row) => {
+    let isdef = row.startsWith("#define");
+    if(isdef) {
+      row = row.trim().split(" ");
+      defines.push([row[1], row.slice(2).join(" ")]);
+    }
+    return !isdef;
+  });
+  text = text.join("\n");
+
+  for(let define of defines) {
+    let r = new RegExp("\\b" + define[0] + "\\b", "g");
+    console.log(r, define);
+    text = text.replace(r, define[1]);
+  }
+  return text;
+}
+
 /**
  * remove extension from a filename
  * @param {String} fn - the filename
@@ -24,6 +45,7 @@ try {
 
   let lang = require("../lib/language.js");
   let text = fs.readFileSync(input, "utf-8");
+  text = processDefines(text);
 
   let output = lang.parse(text, {actions:new structural.Actions()});
 
