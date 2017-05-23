@@ -5,18 +5,42 @@ alias boo uint8_t;
 typedef enum
 {
   a = 11,
-  b = "boobaa"
+  b = 12
 } TestEnum1;
 
 typedef struct {
-  uint32_t v1 = 1;
-  varint v2 = 1;
-} test;
+  uint8_t i1;
+  char s1[uint8_t];
+} simple;
+
+typedef struct {
+  uint32_t i1 = 1;
+  uint32_t i2;
+  char s1[];
+  uint8_t i3;
+  char s2[uint8_t];
+  char s3[i2];
+  char s4[uintv_t];
+  TestEnum1 baa_enum;
+} test1;
+
+typedef struct {
+  uint32_t i1 = 1;
+  uint32_t i2 = 2;
+  char s1[uintv_t];
+  uintv_t i3 = 0xff;
+} test2;
+
+typedef struct {
+  uint32_t i1 = 1;
+  uint32_t i2 = 2;
+  simple i3[10];
+} test3;
 
 typedef struct {
   boo value1;
   int value2;
-  string strvalue;
+  char strvalue[uintv_t];
 
   switch(value1) {
     case 1:
@@ -24,7 +48,7 @@ typedef struct {
       unsigned int another12;
       break;
     case 2:
-      variable string another21;
+      char another21[uintv_t];
       break;
   };
 
@@ -32,6 +56,6 @@ typedef struct {
 } TestResult;
 
 enum TestEnum2 {
-  a = 11,
+  a = 99,
   b = "boobaa"
 };

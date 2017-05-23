@@ -49,8 +49,8 @@ function writeUIntVar(buf, offset, value) {
   return offset;
 }
 
-function readString(buf, offset, size, encoding="utf-8") {
-  let res = buf.toString(encoding, offset, offset+size);
+function readString(buf, offset, length, encoding="utf-8") {
+  let res = buf.toString(encoding, offset, offset+length);
   return res;
 }
 
@@ -61,8 +61,8 @@ function readZString(buf, offset, encoding="utf-8") {
   return [buf.toString(encoding, offset, end), end+1];
 }
 
-function writeString(buf, offset, value) {
-  buf.write(value, offset);
+function writeString(buf, offset, value, length=undefined) {
+  buf.write(value, offset, length);
   offset += Buffer.byteLength(value, "utf-8");
   return offset;
 }

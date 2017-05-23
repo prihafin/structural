@@ -25,42 +25,38 @@ fs.writeFileSync(out, res);
 
 let test = require("./test");
 
-let data = new Buffer("\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff", "ASCII");
-
-let s = test.test.new();
-
-
-
-test.test.write(s, data);
-
+console.log("\n=============================================================================================================");
+let data = new Buffer(40);
+data.fill(0xfe);
+let s = test.test2.new();
+s.s1 = "123";
+console.log(s);
+test.test2.write(s, data);
 console.log(data);
+s = test.test2.read(data, 0);
+console.log(s[0]);
 
-s = test.test.read(data, 0);
+console.log("\n-------------------------------------------------------------------------------------------------------------");
+data.fill(0xfe);
+s = test.test2.new();
+console.log(s);
+test.test2.write(s, data);
+console.log(data);
+s = test.test2.read(data, 0);
+console.log(s[0]);
+
+
+
+
+console.log("\n=============================================================================================================");
+data.fill(0xfe);
+s = test.test3.new();
+s.i3[4].i1 = 123;
+s.i3[5].s1 = "123456789";
 
 console.log(s);
+test.test3.write(s, data);
+console.log(data);
+s = test.test3.read(data, 0);
+console.log(s[0]);
 
-data.fill(0xff);
-
-function readUIntVar(buf, offset) {
-  let i = 0;
-  let v = 0x80;
-  let a = [];
-
-  while(((i===0) || (i<5)) && ((v & 0x80)===128)) {
-    a.unshift(v = buf.readUInt8(offset));
-    offset++; i++;
-  }
-  let res = 0;
-  i = 0;
-  for(let v of a) {
-    res += ((v & 0x7f) << i++*7);
-  }
-  return [res, offset];
-}
-
-
-let len = writeUIntVar(data, 0, 123000);
-
-console.log(len, data);
-
-console.log(readUIntVar(data, 0));

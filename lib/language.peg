@@ -12,7 +12,8 @@ constdecl  <- const decl eq (string / ident / number) eol %constdecl
 typedefstructdecl <- typedefstruct ws ident? ws? "{" ws? structfields ws? "}" ws? ident? ws? eol ws? %typedefstructdecl
 structdecl        <- struct ws ident ws? "{" ws? structfields ws? "}" ws? eol ws? %structdecl
 structfields      <- ws? (structfield / switch)+ ws?
-structfield       <- decl ("[" (number / ident) "]" ws ident)? ws? default:default? ws? eol ws? comment1? ws? %structfield
+_structfield       <- decl ("[" (number / ident) "]" ws ident)? ws? default:default? ws? eol ws? comment1? ws? %structfield
+structfield       <- decl ws? ident? length? ws? default:default? ws? eol ws? comment1? ws? %structfield
 default           <- "=" ws? (string / number / hex)
 
 aliasdecl       <- alias ws ident ws? ident ws? eol %aliasdecl
@@ -27,6 +28,7 @@ case       <- ws? "case" ws number ":" ws? (structfields / break)+ ws? %case
 
 decl           <- list ws? %decl
 list           <- ident ws? list?
+length         <- "[" (number / ident)? "]" %length
 
 alias          <- "alias" %null
 break          <- "break;" %null
