@@ -20,7 +20,6 @@ function processDefines(text) {
 
   for(let define of defines) {
     let r = new RegExp("\\b" + define[0] + "\\b", "g");
-    console.log(r, define);
     text = text.replace(r, define[1]);
   }
   return text;
