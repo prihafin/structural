@@ -6,7 +6,7 @@ let path = require('path');
 let util = require("util");
 let du = require("../res/datautils");
 
-let input = "aperio.h";
+let input = "test2.h";
 let out = "test.js";
 
 let lang = require("../lib/language.js");
