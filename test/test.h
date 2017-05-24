@@ -1,8 +1,5 @@
 const int rawr = 1;
 
-#define boo uint8_t
-#define another uint8_t[59] rawr booboo
-
 typedef enum
 {
   a = 11,
@@ -11,8 +8,8 @@ typedef enum
 
 typedef struct {
   uint8_t i1;
-  char s1[uint8_t];
-  another rawr;
+  char text1[uintv_t];
+  char text2[uintv_t];
 } simple;
 
 typedef struct {
@@ -21,7 +18,7 @@ typedef struct {
   char s1[];
   uint8_t i3;
   char s2[uint8_t];
-  char s3[i2];
+  char s3[uintv_t];
   char s4[uintv_t];
   TestEnum1 baa_enum;
 } test1;

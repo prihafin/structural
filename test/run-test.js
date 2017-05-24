@@ -6,14 +6,14 @@ let path = require('path');
 let util = require("util");
 let du = require("../res/datautils");
 
-let input = "test.h";
+let input = "test2.h";
 let out = "test.js";
 
 let lang = require("../lib/language.js");
 let text = fs.readFileSync(input, "utf-8");
 
 let output = lang.parse(text, {actions:new structural.Actions()});
-console.log(output);
+//console.log(output);
 
 
 let builder = require("../lib/builder-js");
@@ -24,6 +24,9 @@ let res = builder.build(input, output);
 fs.writeFileSync(out, res);
 
 let test = require("./test");
+
+
+process.exit();
 
 console.log("\n=============================================================================================================");
 let data = new Buffer(40);

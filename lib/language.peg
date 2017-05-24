@@ -3,7 +3,7 @@ grammar TEST2
 content   <- decls
 decls     <- (ws? aliasdecl / ws? constdecl / ws? typedefstructdecl / ws? structdecl / ws? typedefenumdecl / ws? enumdecl / ws? comment1)* %decls
 
-comment1  <- "//" [ a-zA-Z0-9_,.;:+!"#¤%&/(){}\[\]=\t*]* [\n\r]*
+comment1  <- "//" [ a-zA-Z0-9_,.;:+!"#¤%&/(){}\[\]=\t*]* [\n\r]* %null
 
 comment2  <- "/*" [ a-zA-Z0-9_,.;:+!"#¤%&(){}\[\]=\n\r\t]* "*/"
 
@@ -11,9 +11,14 @@ constdecl  <- const decl eq (string / ident / number) eol %constdecl
 
 typedefstructdecl <- typedefstruct ws ident? ws? "{" ws? structfields ws? "}" ws? ident? ws? eol ws? %typedefstructdecl
 structdecl        <- struct ws ident ws? "{" ws? structfields ws? "}" ws? eol ws? %structdecl
-structfields      <- ws? (structfield / switch)+ ws?
+structfields      <- ws? (structfield0 / structfield1 / structfield2 / switch)+ ws?
 _structfield       <- decl ("[" (number / ident) "]" ws ident)? ws? default:default? ws? eol ws? comment1? ws? %structfield
-structfield       <- decl ws? ident? length? ws? default:default? ws? eol ws? comment1? ws? %structfield
+__structfield       <- decl length? ws? ident? length? ws? default:default? ws? eol ws? comment1? ws? %structfield
+
+structfield0      <- decl ws? ident? ws? default:default? ws? eol ws? comment1? ws? %structfield0
+structfield1      <- decl ws? ident? length ws? default:default? ws? eol ws? comment1? ws? %structfield1
+structfield2      <- decl length ws? ident? ws? eol ws? comment1? ws? %structfield2
+
 default           <- "=" ws? (string / number / hex)
 
 aliasdecl       <- alias ws ident ws? ident ws? eol %aliasdecl
