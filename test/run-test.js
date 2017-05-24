@@ -6,11 +6,12 @@ let path = require('path');
 let util = require("util");
 let du = require("../res/datautils");
 
-let input = "test2.h";
+let input = "aperio.h";
 let out = "test.js";
 
 let lang = require("../lib/language.js");
 let text = fs.readFileSync(input, "utf-8");
+text = structural.processDefines(text);
 
 let output = lang.parse(text, {actions:new structural.Actions()});
 //console.log(output);
