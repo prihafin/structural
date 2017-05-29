@@ -49,6 +49,14 @@ function writeUIntVar(buf, offset, value) {
   return offset;
 }
 
+function sizeUIntVar(buf, offset, value) {
+  if(value<128) return offset+1;
+  if(value<16384) return offset+2;
+  if(value<2097152) return offset+3;
+  if(value<268435456) return offset+4;
+  return offset+5;
+}
+
 function readString(buf, offset, length, encoding="utf-8") {
   let res = buf.toString(encoding, offset, offset+length);
   return res;
