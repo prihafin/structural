@@ -26,6 +26,9 @@ fs.writeFileSync(out, res);
 
 let test = require("./test");
 
+let o = test.simple.new();
+
+console.log(o.size());
 
 process.exit();
 

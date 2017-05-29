@@ -4,6 +4,6 @@ typedef enum {
 } enumtest;
 
 typedef struct {
-  uint8_t i1 = 123;
-  enumtest arr[i1];
+  uintv_t i1 = 123;
+  char str[i1];
 } simple;
