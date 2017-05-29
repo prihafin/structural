@@ -1,6 +1,6 @@
 {
   "name": "structural",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "codegeneration to read and write structured binary data described by c-ish declarations",
   "main": "./lib/structural.js",
   "bin":{
