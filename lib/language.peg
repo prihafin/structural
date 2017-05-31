@@ -14,13 +14,11 @@ constdecl  <- const decl eq (string / ident / number) eol %constdecl
 
 typedefstructdecl <- typedefstruct ws ident? ws? "{" ws? structfields ws? "}" ws? ident? ws? eol ws? %typedefstructdecl
 structdecl        <- struct ws ident ws? "{" ws? structfields ws? "}" ws? eol ws? %structdecl
-structfields      <- ws? (structfield0 / structfield1 / structfield2 / switch)+ ws?
+structfields      <- ws? (structfield / switch)+ ws?
 _structfield       <- decl ("[" (number / ident) "]" ws ident)? ws? default:default? ws? eol ws? comment1? ws? %structfield
 __structfield       <- decl length? ws? ident? length? ws? default:default? ws? eol ws? comment1? ws? %structfield
 
-structfield0      <- decl ws? ident? ws? default:default? ws? eol ws? comment1? ws? %structfield0
-structfield1      <- decl ws? ident? length ws? default:default? ws? eol ws? comment1? ws? %structfield1
-structfield2      <- decl length ws? ident? ws? eol ws? comment1? ws? %structfield2
+structfield       <- decl ws? default:default? ws? eol ws? comment1? ws? %structfield
 
 default           <- "=" ws? (string / number / hex)
 
@@ -34,8 +32,8 @@ enumfield       <- ident eq (string / number / hex) ws? comma? ws? comment1? ws?
 switch     <- ws? "switch" ws? "(" ident ")" ws? "{" ws? case* ws? "}" eol ws? %switch
 case       <- ws? "case" ws number ":" ws? (structfields / break)+ ws? %case
 
-decl           <- list ws? %decl
-list           <- ident ws? list?
+decl           <- maybearray+ ws? %decl
+maybearray     <- ident length? ws? %maybearray
 length         <- "[" ws? (number / ident)? ws? "]" %length
 
 alias          <- "alias" %null
@@ -50,7 +48,7 @@ eol            <- ws? ";" %null
 comma          <- ws? "," %null
 ws             <- [\n\r\t ]+ %null
 
-ident     <- [A-Za-z_] [A-Za-z0-9_]*
+ident     <- [A-Za-z_] [A-Za-z0-9_]* %ident
 string    <- "\"" [^"]* "\"" %string
 number    <- (hex / num)
 num       <- [0-9]+ ("." [0-9]+)? %number
