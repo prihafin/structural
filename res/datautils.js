@@ -69,60 +69,60 @@ function readZString(buf, offset, encoding="utf-8") {
   return [buf.toString(encoding, offset, end), end+1];
 }
 
-function writeString(buf, offset, value, length=undefined) {
-  buf.write(value, offset, length);
-  offset += Buffer.byteLength(value, "utf-8");
+function writeString(buf, offset, value, length=undefined, encoding="utf-8") {
+  buf.write(value, offset, length, encoding);
+  offset += Buffer.byteLength(value, encoding);
   return offset;
 }
 
-function writeString8(buf, offset, value) {
-  let l = Buffer.byteLength(value, "utf-8");
+function writeString8(buf, offset, value, encoding="utf-8") {
+  let l = Buffer.byteLength(value, encoding);
   buf.writeUInt8(l, offset);
   offset += 1;
-  buf.write(value, offset);
+  buf.write(value, offset, undefined, encoding);
   offset += l;
   return offset;
 }
 
-function writeString16LE(buf, offset, value) {
-  let l = Buffer.byteLength(value, "utf-8");
+function writeString16LE(buf, offset, value, encoding="utf-8") {
+  let l = Buffer.byteLength(value, encoding);
   buf.writeUInt16LE(l, offset);
   offset += 2;
-  buf.write(value, offset);
+  buf.write(value, offset, undefined, encoding);
   offset += l;
   return offset;
 }
 
-function writeString16BE(buf, offset, value) {
-  let l = Buffer.byteLength(value, "utf-8");
+function writeString16BE(buf, offset, value, encoding="utf-8") {
+  let l = Buffer.byteLength(value, encoding);
   buf.writeUInt16BE(l, offset);
   offset += 2;
-  buf.write(value, offset);
+  buf.write(value, offset, undefined, encoding);
   offset += l;
   return offset;
 }
 
-function writeString32LE(buf, offset, value) {
-  let l = Buffer.byteLength(value, "utf-8");
+function writeString32LE(buf, offset, value, encoding="utf-8") {
+  let l = Buffer.byteLength(value, encoding);
   buf.writeUInt32LE(l, offset);
   offset += 4;
-  buf.write(value, offset);
+  buf.write(value, offset, undefined, encoding);
   offset += l;
   return offset;
 }
 
-function writeString32BE(buf, offset, value) {
-  let l = Buffer.byteLength(value, "utf-8");
+function writeString32BE(buf, offset, value, encoding="utf-8") {
+  let l = Buffer.byteLength(value, encoding);
   buf.writeUInt32BE(l, offset);
   offset += 4;
-  buf.write(value, offset);
+  buf.write(value, offset, undefined, encoding);
   offset += l;
   return offset;
 }
 
-function writeZString(buf, offset, value) {
-  let l = Buffer.byteLength(value, "utf-8");
-  buf.write(value, offset);
+function writeZString(buf, offset, value, encoding="utf-8") {
+  let l = Buffer.byteLength(value, encoding);
+  buf.write(value, offset, undefined, encoding);
   offset += l;
   buf.writeUInt8(0, offset);
   offset += 1;

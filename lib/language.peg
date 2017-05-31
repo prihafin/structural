@@ -1,11 +1,14 @@
 grammar TEST2
 
 content   <- decls
-decls     <- (ws? aliasdecl / ws? constdecl / ws? typedefstructdecl / ws? structdecl / ws? typedefenumdecl / ws? enumdecl / ws? comment1)* %decls
+decls     <- (ws? aliasdecl / ws? constdecl / ws? typedefstructdecl / ws? structdecl / ws? typedefenumdecl / ws? enumdecl / ws? comment / ws? ifndef)* %decls
 
-comment1  <- "//" [ a-zA-Z0-9_,.;:+!"#¤%&/(){}\[\]=\t*]* [\n\r]* %null
+comment   <- (comment1 / comment2)
 
-comment2  <- "/*" [ a-zA-Z0-9_,.;:+!"#¤%&(){}\[\]=\n\r\t]* "*/"
+comment1  <- "//" ([^\n]*) %null
+comment2  <- "/*" (!"*/" .)* "*/" %null
+
+ifndef     <- "#ifndef" ([^\n]*) %null
 
 constdecl  <- const decl eq (string / ident / number) eol %constdecl
 
@@ -33,7 +36,7 @@ case       <- ws? "case" ws number ":" ws? (structfields / break)+ ws? %case
 
 decl           <- list ws? %decl
 list           <- ident ws? list?
-length         <- "[" (number / ident)? "]" %length
+length         <- "[" ws? (number / ident)? ws? "]" %length
 
 alias          <- "alias" %null
 break          <- "break;" %null
