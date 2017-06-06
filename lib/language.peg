@@ -1,12 +1,14 @@
 grammar TEST2
 
 content   <- decls
-decls     <- (ws? aliasdecl / ws? constdecl / ws? typedefstructdecl / ws? structdecl / ws? typedefenumdecl / ws? enumdecl / ws? comment / ws? ifndef)* %decls
+decls     <- (ws? constdecl / ws? typedefstructdecl / ws? structdecl / ws? typedefenumdecl / ws? enumdecl / ws? comment / ws? ifndef / ws? pragma)* %decls
 
 comment   <- (comment1 / comment2)
 
 comment1  <- "//" ([^\n]*) %null
 comment2  <- "/*" (!"*/" .)* "*/" %null
+
+pragma     <- "#pragma" ws ident (space (string / ident / number))* [\n\r] %pragma
 
 ifndef     <- "#ifndef" ([^\n]*) %null
 
@@ -22,8 +24,6 @@ structfield       <- decl ws? default:default? ws? eol ws? comment1? ws? %struct
 
 default           <- "=" ws? (string / number / hex)
 
-aliasdecl       <- alias ws ident ws? ident ws? eol %aliasdecl
-
 typedefenumdecl <- typedefenum ws ident? ws? "{" ws? enumfields ws? "}" ws? ident ws? eol ws? %typedefenumdecl
 enumdecl        <- enum ws ident? ws? "{" ws? enumfields ws? "}" ws? eol ws? %enumdecl
 enumfields      <- ws? (enumfield)+ ws?
@@ -36,7 +36,6 @@ decl           <- maybearray+ ws? %decl
 maybearray     <- ident length? ws? %maybearray
 length         <- "[" ws? (number / ident)? ws? "]" %length
 
-alias          <- "alias" %null
 break          <- "break;" %null
 struct         <- "struct" %null
 typedefstruct  <- "typedef struct" %null
@@ -47,6 +46,7 @@ eq             <- ws? "=" ws? %null
 eol            <- ws? ";" %null
 comma          <- ws? "," %null
 ws             <- [\n\r\t ]+ %null
+space          <- [\t ]+ %null
 
 ident     <- [A-Za-z_] [A-Za-z0-9_]* %ident
 string    <- "\"" [^"]* "\"" %string
