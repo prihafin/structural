@@ -50,6 +50,7 @@ space          <- [\t ]+ %null
 
 ident     <- [A-Za-z_] [A-Za-z0-9_]* %ident
 string    <- "\"" [^"]* "\"" %string
-number    <- (hex / num)
+number    <- (bin / hex / num)
 num       <- [0-9]+ ("." [0-9]+)? %number
 hex       <- "0x" [0-9a-fA-F]+ %number
+bin       <- "0b" [01]+ %number
