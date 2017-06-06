@@ -6,7 +6,7 @@ decls     <- (ws? constdecl / ws? typedefstructdecl / ws? structdecl / ws? typed
 comment   <- (comment1 / comment2)
 
 comment1  <- "//" ([^\n]*) ws? %null
-comment2  <- "/*" (!"*/" .)* "*/" %null
+comment2  <- "/*" (!"*/" .)* "*/" ws? %null
 
 pragma     <- "#pragma" ws ident (space (string / ident / number))* [\n\r] %pragma
 
