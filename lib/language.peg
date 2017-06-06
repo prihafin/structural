@@ -5,7 +5,7 @@ decls     <- (ws? constdecl / ws? typedefstructdecl / ws? structdecl / ws? typed
 
 comment   <- (comment1 / comment2)
 
-comment1  <- "//" ([^\n]*) %null
+comment1  <- "//" ([^\n]*) ws? %null
 comment2  <- "/*" (!"*/" .)* "*/" %null
 
 pragma     <- "#pragma" ws ident (space (string / ident / number))* [\n\r] %pragma
@@ -16,7 +16,7 @@ constdecl  <- const decl eq (string / ident / number) eol %constdecl
 
 typedefstructdecl <- typedefstruct ws ident? ws? "{" ws? structfields ws? "}" ws? ident? ws? eol ws? %typedefstructdecl
 structdecl        <- struct ws ident ws? "{" ws? structfields ws? "}" ws? eol ws? %structdecl
-structfields      <- ws? (structfield / switch)+ ws?
+structfields      <- ws? (structfield / switch / comment)+ ws?
 _structfield       <- decl ("[" (number / ident) "]" ws ident)? ws? default:default? ws? eol ws? comment1? ws? %structfield
 __structfield       <- decl length? ws? ident? length? ws? default:default? ws? eol ws? comment1? ws? %structfield
 
