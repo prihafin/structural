@@ -16,10 +16,17 @@ constdecl  <- const decl eq (string / ident / number) eol %constdecl
 
 typedefstructdecl <- typedefstruct ws ident? ws? "{" ws? structfields ws? "}" ws? ident? ws? eol ws? %typedefstructdecl
 structdecl        <- struct ws ident ws? "{" ws? structfields ws? "}" ws? eol ws? %structdecl
-structfields      <- ws? (structfield / switch / comment)+ ws?
+structfields      <- ws? (structfield / lambdafield / switch / comment)+ ws?
 _structfield       <- decl ("[" (number / ident) "]" ws ident)? ws? default:default? ws? eol ws? comment1? ws? %structfield
 __structfield       <- decl length? ws? ident? length? ws? default:default? ws? eol ws? comment1? ws? %structfield
 
+and               <- "&"
+shiftl            <- "<<"
+shiftr            <- ">>"
+logicops          <- ("(" / ")" / "&" / "|" / "^" / "~" / "<<" / ">>" / "+" / "-" / "*" / "/")
+lambdaexpr        <- (ws? op:(ident / number / logicops) ws?)+
+lambdamath        <- get:lambdaexpr set:(ws? "," ws? ident ws? "=" ws? lambdaexpr)? ws?
+lambdafield       <- ws? "lambda" ws ident ws? "=" ws? lambdamath ws? eol ws? %lambdafield
 structfield       <- decl ws? default:default? ws? eol ws? comment1? ws? %structfield
 
 default           <- "=" ws? (string / number / hex)
