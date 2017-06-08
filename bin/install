@@ -3,6 +3,6 @@ const fs = require("fs");
 let cwd = process.cwd().replace("\\", "\\\\");
 let f = fs.readFileSync("bin/win.reg", "utf-8");
 
-f = f.replace(new RegExp("\\${installpath}", "g"), process.cwd()+"\\\\bin");
+f = f.replace(new RegExp("\\${installpath}", "g"), cwd+"\\\\bin");
 
 fs.writeFileSync("tmp.reg", f);
