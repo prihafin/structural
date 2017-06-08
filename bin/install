@@ -1,6 +1,6 @@
 const fs = require("fs");
 
-let f = fs.readFileSync("win.reg", "utf-8");
+let f = fs.readFileSync("bin/win.reg", "utf-8");
 
 f = f.replace("${installpath}\\\\bin", process.cwd());
 
