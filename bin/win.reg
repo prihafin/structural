@@ -1,7 +1,7 @@
 Windows Registry Editor Version 5.00
 
 [HKEY_CLASSES_ROOT\VisualStudio.h.14.0\shell\Convert to Javascript]
-"Icon"="${installpath}\\javascript.png"
+"Icon"="${installpath}\\javascript.ico"
 
 [HKEY_CLASSES_ROOT\VisualStudio.h.14.0\shell\Convert to Javascript\Command]
 @=hex(2):22,00,43,00,3a,00,5c,00,55,00,73,00,65,00,72,00,73,00,5c,00,61,00,73,\
