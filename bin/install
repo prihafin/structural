@@ -1,1 +1,7 @@
-console.log("yay!");
+const fs = require("fs");
+
+let f = fs.readFileSync("win.reg", "utf-8");
+
+f = f.replace("${installpath}\\\\bin", process.cwd());
+
+fs.writeFileSync("tmp.reg", f);
