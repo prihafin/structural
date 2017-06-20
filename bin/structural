@@ -25,6 +25,7 @@ try {
   let lang = require("../lib/language.js");
   let text = fs.readFileSync(input, "utf-8");
   text = structural.processDefines(text);
+  text = text.trim();
 
   let output = lang.parse(text, {actions:new structural.Actions()});
 
