@@ -2,7 +2,7 @@
 library to unify binary format declarations to a single c-like syntax
 
 ## install with
-<pre>npm install git+http://address/asseri/structural -g</pre>
+`npm install git+http://address/asseri/structural -g`
 - note the -g to install it as global
 
 ## usage
