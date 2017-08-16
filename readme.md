@@ -6,7 +6,12 @@ library to unify binary format declarations to a single c-like syntax
 - note the -g to install it as global
 
 ## usage
-`structural input.h [--out filename.js]`
+`structural [options] input.h`
+
+### options
+
+- `--language`, `-l` set output language. arguments can be `py` or `js`. default is `js`.
+- `--out`, `-o`: set output filename, default is input filename with language as extension.
 
 ## supported datatypes
 
