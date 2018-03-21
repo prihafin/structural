@@ -1,3 +1,46 @@
+let INTEGER_SIZE = process.arch.endsWith("64") ? 64 : 32;
+
+let readIntLE = Buffer.prototype.readInt32LE;
+let readIntBE = Buffer.prototype.readInt32BE;
+let readUIntLE = Buffer.prototype.readInt32LE;
+let readUIntBE = Buffer.prototype.readInt32BE;
+
+/**
+ * @param {Buffer} buf
+ */
+function readInt64LE(buf, offset) {
+  let h = buf.readInt32LE(offset); offset+=2;
+  let l = buf.readInt32LE(offset); offset+=2;
+  return (h<<32) | l;
+}
+
+function readInt64BE(buf, offset) {
+  let h = buf.readInt32LE(offset); offset+=2;
+  let l = buf.readInt32LE(offset); offset+=2;
+  return (l<<32) | h;
+}
+
+function readUInt64LE(buf, offset) {
+  let h = buf.readUInt32LE(offset); offset+=2;
+  let l = buf.readUInt32LE(offset); offset+=2;
+  return (h<<32) | l;
+}
+
+function readUInt64BE(buf, offset) {
+  let h = buf.readUInt32LE(offset); offset+=2;
+  let l = buf.readUInt32LE(offset); offset+=2;
+  return (l<<32) | h;
+}
+
+if(INTEGER_SIZE===64) {
+  readIntLE = Buffer.prototype.readInt64LE;
+  readIntBE = Buffer.prototype.readInt64BE;
+  readUIntLE = Buffer.prototype.readUInt64LE;
+  readUIntBE = Buffer.prototype.readUInt64BE;
+}
+
+let readUInt = null;
+
 function readUIntVar(buf, offset) {
   let i = 0;
   let v = 0x80;
@@ -57,9 +100,17 @@ function sizeUIntVar(value) {
   return 5;
 }
 
-function readString(buf, offset, length, encoding="utf-8") {
+function readStringOld(buf, offset, length, encoding="utf-8") {
   let res = buf.toString(encoding, offset, offset+length);
   return res;
+}
+
+function readString(buf, offset, length, encoding="utf-8") {
+  let end = offset+length;
+  if(end===undefined) end = buf.indexOf(0, offset);
+  if(end===-1 || end>offset+length)  end = offset+length;
+  if(end===offset) return "";
+  return buf.toString(encoding, offset, end);
 }
 
 function readZString(buf, offset, encoding="utf-8") {
