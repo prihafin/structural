@@ -122,8 +122,8 @@ function readZString(buf, offset, encoding="utf-8") {
 
 function writeString(buf, offset, value, length=undefined, encoding="utf-8") {
   buf.write(value, offset, length, encoding);
-  offset += Buffer.byteLength(value, encoding);
-  return offset;
+  if(length===undefined) return offset + Buffer.byteLength(value, encoding);
+  return offset+length;
 }
 
 function writeString8(buf, offset, value, encoding="utf-8") {
