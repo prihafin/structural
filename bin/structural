@@ -16,34 +16,38 @@ function removeExtension(fn) {
   return fn.slice(0, i);
 }
 
-try {
+exports.parse = function parse(...argv) {
+  try {
+    let args = nopt({"out": String, "language": String}, {"o":"--out", "l":"--language"}, argv, 0);
+    let input = args.argv.remain[0];
+    if(args.language===undefined) args.language = "js";
+    if(args.out===undefined) args.out = removeExtension(input)+"."+args.language;
+
+    let lang = require("../lib/language.js");
+    let text = fs.readFileSync(input, "utf-8");
+    text = structural.processDefines(text);
+    text = text.trim();
+
+    let output = lang.parse(text, {actions:new structural.Actions()});
+
+    let builder = require("../lib/builder-"+args.language);
+
+    let res = builder.build(input, output);
+
+    fs.writeFileSync(args.out, res);
+
+    console.log("output written to "+args.out);
+  } catch (e) {
+    console.error(e);
+    process.exit(-1);
+  }
+}
+
+if(require.main===module) {
   if(process.argv.length<3) {
     console.log('usage: structural [--language|-l=js|py] definitions.h [--out|-o outfilename]');
     return;
   }
 
-  let args = nopt({"out": String, "language": String}, {"o":"--out", "l":"--language"}, process.argv, 2);
-  let input = args.argv.remain[0];
-  if(args.language===undefined) args.language = "js";
-  if(args.out===undefined) args.out = removeExtension(input)+"."+args.language;
-
-  let lang = require("../lib/language.js");
-  let text = fs.readFileSync(input, "utf-8");
-  text = structural.processDefines(text);
-  text = text.trim();
-
-  let output = lang.parse(text, {actions:new structural.Actions()});
-
-  let builder = require("../lib/builder-"+args.language);
-
-  let res = builder.build(input, output);
-
-  fs.writeFileSync(args.out, res);
-
-  console.log("output written to "+args.out);
-} catch (e) {
-  console.error(e);
-  if(e.message) console.error(e.message);
-  if(e.stack) console.error(e.stack);
-  process.exit(-1);
+  exports.parse(...process.argv.slice(2));
 }
