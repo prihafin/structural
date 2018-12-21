@@ -17,6 +17,11 @@ function removeExtension(fn) {
 }
 
 try {
+  if(process.argv.length<3) {
+    console.log('usage: structural [--language|-l=js|py] definitions.h [--out|-o outfilename]');
+    return;
+  }
+
   let args = nopt({"out": String, "language": String}, {"o":"--out", "l":"--language"}, process.argv, 2);
   let input = args.argv.remain[0];
   if(args.language===undefined) args.language = "js";
