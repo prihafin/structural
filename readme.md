@@ -3,6 +3,7 @@ library to unify binary format declarations to a single c-like syntax
 
 ## install with
 `npm install git+http://[repository address]/asseri/structural -g`
+
 - note the -g to install it as global
 
 ## usage
@@ -70,3 +71,7 @@ typedef struct {
   simple embedded; // embedded struct
 } demo;
 ```
+
+## Notes
+
+The parser definition is constructed with PEG grammar and uses canopy to create the js parser

@@ -1,7 +1,7 @@
 grammar TEST2
 
 content   <- decls
-decls     <- (ws? constdecl / ws? typedefstructdecl / ws? structdecl / ws? typedefenumdecl / ws? enumdecl / ws? comment / ws? ifndef / ws? pragma)* %decls
+decls     <- (ws? constdecl / ws? typedefstructdecl / ws? structdecl / ws? typedefenumdecl / ws? enumdecl / ws? comment / ws? ifndef / ws? pragma / ws? include / ws? sysinclude)* %decls
 
 comment   <- (comment1 / comment2)
 
@@ -12,13 +12,20 @@ pragma     <- "#pragma" ws ident (space (string / ident / number))* [\n\r] %prag
 
 ifndef     <- "#ifndef" ([^\n]*) %null
 
+filepath   <- [\w-./]*
+
+_include   <- "#include" %null
+
+include    <- _include ws '"' filepath '"' %include
+sysinclude <- _include ws lt filepath gt %sysinclude
+
 constdecl  <- const decl eq (string / ident / number) eol %constdecl
 
 typedefstructdecl <- typedefstruct ws ident? ws? "{" ws? structfields ws? "}" ws? ident? ws? eol ws? %typedefstructdecl
 structdecl        <- struct ws ident ws? "{" ws? structfields ws? "}" ws? eol ws? %structdecl
 structfields      <- ws? (structfield / lambdafield / switch / comment)+ ws?
-_structfield       <- decl ("[" (number / ident) "]" ws ident)? ws? default:default? ws? eol ws? comment1? ws? %structfield
-__structfield       <- decl length? ws? ident? length? ws? default:default? ws? eol ws? comment1? ws? %structfield
+_structfield      <- decl ("[" (number / ident) "]" ws ident)? ws? default:default? ws? eol ws? comment1? ws? %structfield
+__structfield     <- decl length? ws? ident? length? ws? default:default? ws? eol ws? comment1? ws? %structfield
 
 and               <- "&"
 shiftl            <- "<<"
@@ -54,6 +61,10 @@ eol            <- ws? ";" %null
 comma          <- ws? "," %null
 ws             <- [\n\r\t ]+ %null
 space          <- [\t ]+ %null
+qt             <- "'" %null
+dqt            <- '"' %null
+lt             <- '<' %null
+gt             <- '>' %null
 
 ident     <- [A-Za-z_] [A-Za-z0-9_]* %ident
 string    <- "\"" [^"]* "\"" %string
