@@ -21,11 +21,12 @@ sysinclude <- _include ws lt filepath gt %sysinclude
 
 constdecl  <- const decl eq (string / ident / number) eol %constdecl
 
-typedefstructdecl <- typedefstruct ws ident? ws? "{" ws? structfields ws? "}" ws? ident? ws? eol ws? %typedefstructdecl
-structdecl        <- struct ws ident ws? "{" ws? structfields ws? "}" ws? eol ws? %structdecl
+typedefstructdecl <- typedefstruct ws ident? ws? "{" ws? structfields ws? "}" ws? idents? ws? eol ws? %typedefstructdecl
+structdecl        <- struct ws ident? ws? "{" ws? structfields ws? "}" ws? idents? ws? eol ws? %structdecl
 structfields      <- ws? (structfield / lambdafield / switch / comment)+ ws?
 _structfield      <- decl ("[" (number / ident) "]" ws ident)? ws? default:default? ws? eol ws? comment1? ws? %structfield
 __structfield     <- decl length? ws? ident? length? ws? default:default? ws? eol ws? comment1? ws? %structfield
+idents            <- pident ws? ("," ws? pident)+
 
 and               <- "&"
 shiftl            <- "<<"
@@ -66,6 +67,7 @@ dqt            <- '"' %null
 lt             <- '<' %null
 gt             <- '>' %null
 
+pident    <- "*"? [A-Za-z_] [A-Za-z0-9_]* %pident
 ident     <- [A-Za-z_] [A-Za-z0-9_]* %ident
 string    <- "\"" [^"]* "\"" %string
 number    <- (bin / hex / num)
