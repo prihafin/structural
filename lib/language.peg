@@ -1,72 +1,89 @@
 grammar TEST2
 
-content   <- decls
-decls     <- (ws? constdecl / ws? typedefstructdecl / ws? structdecl / ws? typedefenumdecl / ws? enumdecl / ws? comment / ws? ifndef / ws? pragma / ws? include / ws? sysinclude)* %decls
+content    <- decls
+decls      <- (ws? constdecl / ws? typedefstructdecl / ws? structdecl / ws? typedefenumdecl / ws? enumdecl / ws? comment / ws? ifndef / ws? pragma / ws? include / ws? sysinclude)* %decls
 
-comment   <- (comment1 / comment2)
+comment    <- (comment1 / comment2)
 
-comment1  <- "//" ([^\n]*) ws? %null
-comment2  <- "/*" (!"*/" .)* "*/" ws? %null
+comment1   <- "//" ([^\n^\r]*) ws? %comment1
+comment2   <- "/*" (!"*/" .)* "*/" ws? %comment2
 
-pragma     <- "#pragma" ws ident (space (string / ident / number))* [\n\r] %pragma
+pragma     <- "#pragma" ws pragmas (space (string / ident / number))* [\n\r] %pragma
+pragmas    <- ("littleendian" / "bigendian")
 
 ifndef     <- "#ifndef" ([^\n]*) %null
 
 filepath   <- [\w-./]*
 
-_include   <- "#include" %null
+includekw  <- "#include" %null
 
-include    <- _include ws '"' filepath '"' %include
-sysinclude <- _include ws lt filepath gt %sysinclude
+include    <- includekw ws dqt filepath dqt %include
+sysinclude <- includekw ws lt filepath gt %sysinclude
 
-constdecl  <- const decl eq (string / ident / number) eol %constdecl
+constdecl  <- const decl eq ws? expression eol %constdecl
 
-typedefstructdecl <- typedefstruct ws ident? ws? "{" ws? structfields ws? "}" ws? idents? ws? eol ws? %typedefstructdecl
+typedefstructdecl <- typedefstruct ws ident? ws? "{" ws? structfields ws? "}" ws? idents? ws? eol ws? %flatten
 structdecl        <- struct ws ident? ws? "{" ws? structfields ws? "}" ws? idents? ws? eol ws? %structdecl
-structfields      <- ws? (structfield / lambdafield / switch / comment)+ ws?
-idents            <- pident ws? ("," ws? pident)*
+structfields      <- ws? (structfield / lambdafield / switch / comment)+ ws? %structfields
+idents            <- ident ws? ("," ws? ident)* %idents
+
 
 and               <- "&"
 shiftl            <- "<<"
 shiftr            <- ">>"
 logicops          <- ("(" / ")" / "&" / "|" / "^" / "~" / "<<" / ">>" / "+" / "-" / "*" / "/")
+
 lambdaexpr        <- (ws? op:(ident / number / logicops) ws?)+
 lambdamath        <- get:lambdaexpr set:(ws? "," ws? ident ws? "=" ws? lambdaexpr)? ws?
 lambdafield       <- ws? "lambda" ws ident ws? "=" ws? lambdamath ws? eol ws? %lambdafield
-structfield       <- decl ws? default:default? ws? eol ws? comment1? ws? %structfield
 
-default           <- "=" ws? (string / number / hex)
+structfield       <- structfield_ skip %structfield
+structfield_      <- type ws? ident length? ws? default:default? ws? eol ws? comment1? ws? %flatten
+
+type              <- (string_type / other_type) ws? %type
+
+other_type        <- modifier? modifier? modifier? ident %other_type
+modifier          <- ("unsigned" / "reversed") ws %modifier
+
+string_type       <- (encoding? "string" / encoding? "cstring" / encoding? "char") ws %string_type
+encoding          <- ("utf8" / "ascii" / "utf16le" / "ucs2" / "base64" / "latin1" / "binary" / "hex") ws %encoding
+
+default           <- eq ws? (string / number / hex / ident) %default
 
 typedefenumdecl <- typedefenum ws ident? ws? "{" ws? enumfields ws? "}" ws? ident ws? eol ws? %typedefenumdecl
 enumdecl        <- enum ws ident? ws? "{" ws? enumfields ws? "}" ws? eol ws? %enumdecl
 enumfields      <- ws? (enumfield)+ ws?
 enumfield       <- ident eq (string / number / hex) ws? comma? ws? comment1? ws? %enumfield
 
-switch     <- ws? "switch" ws? "(" ident ")" ws? "{" ws? case* ws? "}" eol ws? %switch
-case       <- ws? "case" ws number ":" ws? (structfields / break)+ ws? %case
+switch          <- ws? "switch" ws? "(" ident ")" ws? "{" ws? case* ws? "}" eol ws? %switch
+case            <- ws? "case" ws number ":" ws? (structfields / break)+ ws? %case
 
 decl           <- maybearray+ ws? %decl
 maybearray     <- ident length? ws? %maybearray
-length         <- "[" ws? (number / ident)? ws? "]" %length
+length         <- "[" ws? value (ws? arithmetic ws? value)? ws? "]" %length
 
 break          <- "break;" %null
-struct         <- "struct" %null
-typedefstruct  <- "typedef struct" %null
+struct         <- "struct" %typestr
+typedefstruct  <- "typedef struct" %typestr
 enum           <- "enum" %null
 typedefenum    <- "typedef enum" %null
 const          <- "const" ws %null
-eq             <- ws? "=" ws? %null
-eol            <- ws? ";" %null
-comma          <- ws? "," %null
+eq             <- ws? "=" %eq
+eol            <- ws? ";" %eol
+comma          <- ws? "," %comma
 ws             <- [\n\r\t ]+ %null
 space          <- [\t ]+ %null
 qt             <- "'" %null
 dqt            <- '"' %null
 lt             <- '<' %null
 gt             <- '>' %null
+skip           <- ''
 
-pident    <- "*"? [A-Za-z_] [A-Za-z0-9_]* %pident
-ident     <- [A-Za-z_] [A-Za-z0-9_]* %ident
+value          <- (string / ident / number)
+arithmetic     <- ("+" / "-" / "*" / "/")
+expression     <- value (ws? arithmetic ws? value)*
+
+ident     <- "*"? [A-Za-z_] [A-Za-z0-9_]* %ident
 string    <- "\"" [^"]* "\"" %string
 number    <- (bin / hex / num)
 num       <- [0-9]+ ("." [0-9]+)? %number

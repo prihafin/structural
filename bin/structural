@@ -22,21 +22,12 @@ exports.parse = function parse(...argv) {
     if(args.language===undefined) args.language = "js";
     if(args.out===undefined) args.out = removeExtension(input)+"."+args.language;
 
-    let lang = require("../lib/language.js");
-    let text = fs.readFileSync(input, "utf-8");
-    text = structural.processDefines(text);
-    text = text.trim();
-
-    let output = lang.parse(text, {actions:new structural.Actions()});
-    let builder = require("../lib/builder-"+args.language);
-
-    let res = builder.build(input, output);
-
+    let res = structural.parseFile(input, args.language);
     fs.writeFileSync(args.out, res);
 
     console.log("output written to "+args.out);
   } catch (e) {
-    console.error(e);
+    console.log(e);
     process.exit(-1);
   }
 }

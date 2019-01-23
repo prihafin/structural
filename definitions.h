@@ -1,3 +1,5 @@
+#define NULL 0
+
 #define uint64_t int
 #define uint56_t int
 #define uint48_t int
@@ -6,6 +8,7 @@
 #define uint24_t int
 #define uint16_t int
 #define uint8_t int
+#define uint unsigned int
 
 #define int64_t int
 #define int56_t int
@@ -24,9 +27,11 @@
 #define int24 int
 #define int16 int
 #define int8 int
+#define intv int
 
 #define variable unsigned
 #define cstring char
+#define string char
 #define nybble char
 #define reversed unsigned
 #define bitfield int

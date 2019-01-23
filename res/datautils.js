@@ -1,4 +1,5 @@
 let INTEGER_SIZE = process.arch.endsWith("64") ? 64 : 32;
+let INTEGER_SIZE_BYTES = INTEGER_SIZE===64 ? 8 : 4;
 
 let readIntLE = Buffer.prototype.readInt32LE;
 let readIntBE = Buffer.prototype.readInt32BE;
@@ -98,6 +99,10 @@ function sizeUIntVar(value) {
   if(value<2097152) return 3;
   if(value<268435456) return 4;
   return 5;
+}
+
+function sizeIntVar() {
+  throw new Error('signed variable int not yet supported');
 }
 
 function readStringOld(buf, offset, length, encoding="utf-8") {
