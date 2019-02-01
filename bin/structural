@@ -10,22 +10,29 @@ let nopt = require('nopt');
  * @returns {String} the filename without extension
  */
 function removeExtension(fn) {
-  let i = fn.lastIndexOf(".");
+  let i = fn.lastIndexOf('.');
   if(i<0) return fn;
   return fn.slice(0, i);
 }
 
 exports.parse = function parse(...argv) {
   try {
-    let args = nopt({"out": String, "language": String}, {"o":"--out", "l":"--language"}, argv, 0);
+    let args = nopt({'out': String, 'language': String}, {'o':'--out', 'l':'--language'}, argv, 0);
     let input = args.argv.remain[0];
-    if(args.language===undefined) args.language = "js";
-    if(args.out===undefined) args.out = removeExtension(input)+"."+args.language;
+    if(args.language===undefined) args.language = 'js';
+    if(args.out===undefined) args.out = removeExtension(input)+'.'+args.language;
 
     let res = structural.parseFile(input, args.language);
     fs.writeFileSync(args.out, res);
 
-    console.log("output written to "+args.out);
+    console.log('output written to '+args.out);
+
+    args.out = fs.realpathSync(args.out);
+
+    if(args.language=='js') {
+      require(args.out);
+      console.log('syntax test succeeded');
+    }
   } catch (e) {
     console.log(e);
     process.exit(-1);
