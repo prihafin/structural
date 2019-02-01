@@ -34,6 +34,8 @@ exports.parse = function parse(...argv) {
 
 if(require.main===module) {
   if(process.argv.length<3) {
+    let p = require('./../package.json');
+    console.log('Structural version', p.version);
     console.log('usage: structural [--language|-l=js|py] definitions.h [--out|-o outfilename]');
     return;
   }
