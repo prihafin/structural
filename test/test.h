@@ -14,6 +14,8 @@ typedef struct MYSTRUCT1 {
 
 typedef struct MYSTRUCT2 {
   uint32_t len;
+  nybble nybnyb_1;
+  nybble nybnyb_2;
   reversed unsigned int value1[const1];
 };
 

@@ -22,7 +22,7 @@ sysinclude <- includekw ws lt filepath gt %sysinclude
 
 constdecl  <- const decl eq ws? expression eol %constdecl
 
-typedefstructdecl <- typedefstruct ws ident? ws? "{" ws? structfields ws? "}" ws? idents? ws? eol ws? %flatten
+typedefstructdecl <- typedefstruct ws ident? ws? "{" ws? structfields ws? "}" ws? idents? ws? eol ws? %typedefstructdecl
 structdecl        <- struct ws ident? ws? "{" ws? structfields ws? "}" ws? idents? ws? eol ws? %structdecl
 structfields      <- ws? (structfield / lambdafield / switch / comment)+ ws? %structfields
 idents            <- ident ws? ("," ws? ident)* %idents

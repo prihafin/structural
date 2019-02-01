@@ -26,7 +26,7 @@ Some special types supported are listed below
 - `[u]int56_t` seven byte integer
 - `variable int` one to five byte unsigned integer (note, always unsigned)
 - `[encoding] cstring` zero terminated string
-- `[encoding] string name[fieldname] or [encoding] string name[number]` string of a specific size (note, the `fieldname`must be a field defined before this string)
+- `[encoding] string name[fieldname] or [encoding] string name[number]` string of a specific size (note, the `fieldname`must be a field defined before this string, or a constant)
 - `struct` embedded structure
 - `switch(fieldname)` conditional fields
 - `nybble name[bytecount]` array of 4bit nybbles
