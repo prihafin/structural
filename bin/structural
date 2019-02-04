@@ -30,8 +30,26 @@ exports.parse = function parse(...argv) {
     args.out = fs.realpathSync(args.out);
 
     if(args.language=='js') {
-      require(args.out);
+      let m = require(args.out);
       console.log('syntax test succeeded');
+      let buf = Buffer.allocUnsafe(1000000);
+      for(let key of Object.keys(m)) {
+        if(key=='STRUCTURE') continue;
+        if(!key.endsWith('_ADDRESS')) continue;
+        key = key.slice(0, -8);
+        try {
+          let cls = m[key];
+          if(!cls) continue;
+          cls.size();
+          let o = new cls(buf);
+          o.size();
+        } catch(e) {
+          console.error('Exception testing', key, e);
+          //console.error(e);
+        }
+        //if(!(cls.constructor!=Function)) continue;
+        //console.log(cls.constructor.name, cls.__proto__.constructor.name);
+      }
     }
   } catch (e) {
     console.log(e);
