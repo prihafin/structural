@@ -1,16 +1,18 @@
 @echo off
 
-dir test.js > NUL 2>&1
+set file=structures
+
+dir %file%.js > NUL 2>&1
 
 if "%errorlevel%" == "0" (
-  del /Q /F test.js
+  del /Q /F %file%.js
 )
 
 echo Generating parser...
 call canopy ../lib/language.peg
 
 echo Running parser...
-node ..\bin\structural test.h
+node ..\bin\structural %file%.h
 
 if "%errorlevel%" == "0" (
   echo Running result...
