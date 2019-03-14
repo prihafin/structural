@@ -1,4 +1,11 @@
-let INTEGER_SIZE = process.arch.endsWith("64") ? 64 : 32;
+let iconv = null;
+try {
+  iconv = require('iconv-lite');
+  iconv.encode('c', 'iso-8859-1');
+} catch(e) {
+}
+
+let INTEGER_SIZE = process.arch.endsWith('64') ? 64 : 32;
 let INTEGER_SIZE_BYTES = INTEGER_SIZE===64 ? 8 : 4;
 
 let readIntLE = Buffer.prototype.readInt32LE;
@@ -105,33 +112,33 @@ function sizeIntVar() {
   throw new Error('signed variable int not yet supported');
 }
 
-function readStringOld(buf, offset, length, encoding="utf-8") {
+function readStringOld(buf, offset, length, encoding='utf8') {
   let res = buf.toString(encoding, offset, offset+length);
   return res;
 }
 
-function readString(buf, offset, length, encoding="utf-8") {
+function readString(buf, offset, length, encoding='utf8') {
   let end = offset+length;
   if(end===undefined) end = buf.indexOf(0, offset);
   if(end===-1 || end>offset+length)  end = offset+length;
-  if(end===offset) return "";
+  if(end===offset) return '';
   return buf.toString(encoding, offset, end);
 }
 
-function readZString(buf, offset, encoding="utf-8") {
+function readZString(buf, offset, encoding='utf8') {
   let end = buf.indexOf(0, offset);
-  if(end===-1) throw "Buffer contains no zero terminated string";
+  if(end===-1) throw 'Buffer contains no zero terminated string';
   if(end===offset) return ["", 1];
   return [buf.toString(encoding, offset, end), end+1];
 }
 
-function writeString(buf, offset, value, length=undefined, encoding="utf-8") {
+function writeString(buf, offset, value, length=undefined, encoding='utf8') {
   buf.write(value, offset, length, encoding);
   if(length===undefined) return offset + Buffer.byteLength(value, encoding);
   return offset+length;
 }
 
-function writeString8(buf, offset, value, encoding="utf-8") {
+function writeString8(buf, offset, value, encoding='utf8') {
   let l = Buffer.byteLength(value, encoding);
   buf.writeUInt8(l, offset);
   offset += 1;
@@ -140,7 +147,7 @@ function writeString8(buf, offset, value, encoding="utf-8") {
   return offset;
 }
 
-function writeString16LE(buf, offset, value, encoding="utf-8") {
+function writeString16LE(buf, offset, value, encoding='utf8') {
   let l = Buffer.byteLength(value, encoding);
   buf.writeUInt16LE(l, offset);
   offset += 2;
@@ -149,7 +156,7 @@ function writeString16LE(buf, offset, value, encoding="utf-8") {
   return offset;
 }
 
-function writeString16BE(buf, offset, value, encoding="utf-8") {
+function writeString16BE(buf, offset, value, encoding='utf8') {
   let l = Buffer.byteLength(value, encoding);
   buf.writeUInt16BE(l, offset);
   offset += 2;
@@ -158,7 +165,7 @@ function writeString16BE(buf, offset, value, encoding="utf-8") {
   return offset;
 }
 
-function writeString32LE(buf, offset, value, encoding="utf-8") {
+function writeString32LE(buf, offset, value, encoding='utf8') {
   let l = Buffer.byteLength(value, encoding);
   buf.writeUInt32LE(l, offset);
   offset += 4;
@@ -167,7 +174,7 @@ function writeString32LE(buf, offset, value, encoding="utf-8") {
   return offset;
 }
 
-function writeString32BE(buf, offset, value, encoding="utf-8") {
+function writeString32BE(buf, offset, value, encoding='utf8') {
   let l = Buffer.byteLength(value, encoding);
   buf.writeUInt32BE(l, offset);
   offset += 4;
@@ -176,7 +183,7 @@ function writeString32BE(buf, offset, value, encoding="utf-8") {
   return offset;
 }
 
-function writeZString(buf, offset, value, encoding="utf-8") {
+function writeZString(buf, offset, value, encoding='utf8') {
   let l = Buffer.byteLength(value, encoding);
   buf.write(value, offset, undefined, encoding);
   offset += l;

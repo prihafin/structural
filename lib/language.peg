@@ -46,7 +46,7 @@ other_type        <- modifier? modifier? modifier? ident %other_type
 modifier          <- ("unsigned" / "reversed") ws %modifier
 
 string_type       <- (encoding? "string" / encoding? "cstring" / encoding? "char") ws %string_type
-encoding          <- ("utf8" / "ascii" / "utf16le" / "ucs2" / "base64" / "latin1" / "binary" / "hex") ws %encoding
+encoding          <- ("utf8" / "ascii" / "utf16le" / "ucs2" / "base64" / "latin1" / "binary" / "hex" / value) ws %encoding
 
 default           <- eq ws? (string / number / hex / ident) %default
 
@@ -60,7 +60,7 @@ case            <- ws? "case" ws number ":" ws? (structfields / break)+ ws? %cas
 
 decl           <- maybearray+ ws? %decl
 maybearray     <- ident length? ws? %maybearray
-length         <- "[" ws? value (ws? arithmetic ws? value)? ws? "]" %length
+length         <- "[" ws? value? (ws? arithmetic ws? value)? ws? "]" %length
 
 break          <- "break;" %null
 struct         <- "struct" %typestr
