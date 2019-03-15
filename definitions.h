@@ -61,3 +61,7 @@
 #define hex
 #define bigendian
 #define littleendian
+
+#define transform(arg)
+
+struct TRANSFORM {}

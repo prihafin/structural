@@ -22,11 +22,10 @@ sysinclude <- includekw ws lt filepath gt %sysinclude
 
 constdecl  <- const decl eq ws? expression eol %constdecl
 
-typedefstructdecl <- typedefstruct ws ident? ws? "{" ws? structfields ws? "}" ws? idents? ws? eol ws? %typedefstructdecl
-structdecl        <- struct ws ident? ws? "{" ws? structfields ws? "}" ws? idents? ws? eol ws? %structdecl
+typedefstructdecl <- typedefstruct (ws (transform / ident))? (ws (transform / ident))? ws? "{" ws? structfields ws? "}" ws? idents? ws? eol ws? %typedefstructdecl
+structdecl        <- struct ws ident? (ws transform)? ws? "{" ws? structfields ws? "}" ws? idents? ws? eol ws? %structdecl
 structfields      <- ws? (structfield / lambdafield / switch / comment)+ ws? %structfields
 idents            <- ident ws? ("," ws? ident)* %idents
-
 
 and               <- "&"
 shiftl            <- "<<"
@@ -38,12 +37,13 @@ lambdamath        <- get:lambdaexpr set:(ws? "," ws? ident ws? "=" ws? lambdaexp
 lambdafield       <- ws? "lambda" ws ident ws? "=" ws? lambdamath ws? eol ws? %lambdafield
 
 structfield       <- structfield_ skip %structfield
-structfield_      <- type ws? ident length? ws? default:default? ws? eol ws? comment1? ws? %flatten
+structfield_      <- transform? ws? type ws? ident length? ws? default:default? ws? eol ws? comment1? ws? %flatten
 
 type              <- (string_type / other_type) ws? %type
 
 other_type        <- modifier? modifier? modifier? ident %other_type
-modifier          <- ("unsigned" / "reversed") ws %modifier
+modifier          <- ("unsigned" / "reversed" / transform) ws %modifier
+transform         <- "transform(" ident ")" %transform
 
 string_type       <- (encoding? "string" / encoding? "cstring" / encoding? "char") ws %string_type
 encoding          <- ("utf8" / "ascii" / "utf16le" / "ucs2" / "base64" / "latin1" / "binary" / "hex" / value) ws %encoding
@@ -83,7 +83,8 @@ value          <- (string / ident / number)
 arithmetic     <- ("+" / "-" / "*" / "/")
 expression     <- value (ws? arithmetic ws? value)*
 
-ident     <- "*"? [A-Za-z_] [A-Za-z0-9_]* %ident
+debug     <- "*"? !![A-Za-z_] [A-Za-z0-9_]* %debug
+ident     <- "*"? !![A-Za-z_] [A-Za-z0-9_]* %ident
 string    <- "\"" [^"]* "\"" %string
 number    <- (bin / hex / num)
 num       <- [0-9]+ ("." [0-9]+)? %number

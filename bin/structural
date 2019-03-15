@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-let structural = require('../lib/structural');
+let structural = require('../lib/libstructural');
 let fs = require('fs');
 let nopt = require('nopt');
 
@@ -17,12 +17,12 @@ function removeExtension(fn) {
 
 exports.parse = function parse(...argv) {
   try {
-    let args = nopt({'out': String, 'language': String}, {'o':'--out', 'l':'--language'}, argv, 0);
+    let args = nopt({'out': String, 'language': String, 'parser':String}, {'o':'--out', 'l':'--language', 'p':'--parser'}, argv, 0);
     let input = args.argv.remain[0];
     if(args.language===undefined) args.language = 'js';
     if(args.out===undefined) args.out = removeExtension(input)+'.'+args.language;
 
-    let res = structural.parseFile(input, args.language);
+    let res = structural.parseFile(input, args);
     fs.writeFileSync(args.out, res);
 
     console.log('output written to '+args.out);
