@@ -122,7 +122,8 @@ function readString(buf, offset, length, encoding='utf8') {
   if(end===undefined) end = buf.indexOf(0, offset);
   if(end===-1 || end>offset+length)  end = offset+length;
   if(end===offset) return '';
-  return buf.toString(encoding, offset, end);
+  let res = buf.toString(encoding, offset, end);
+  return res.slice(0, res.indexOf('\x00'));
 }
 
 function readZString(buf, offset, encoding='utf8') {
@@ -133,6 +134,7 @@ function readZString(buf, offset, encoding='utf8') {
 }
 
 function writeString(buf, offset, value, length=undefined, encoding='utf8') {
+  value = value.padEnd(length, '\x00');
   buf.write(value, offset, length, encoding);
   if(length===undefined) return offset + Buffer.byteLength(value, encoding);
   return offset+length;
@@ -142,6 +144,7 @@ function writeString8(buf, offset, value, encoding='utf8') {
   let l = Buffer.byteLength(value, encoding);
   buf.writeUInt8(l, offset);
   offset += 1;
+  value = value.padEnd(l, '\x00');
   buf.write(value, offset, undefined, encoding);
   offset += l;
   return offset;
@@ -151,6 +154,7 @@ function writeString16LE(buf, offset, value, encoding='utf8') {
   let l = Buffer.byteLength(value, encoding);
   buf.writeUInt16LE(l, offset);
   offset += 2;
+  value = value.padEnd(l, '\x00');
   buf.write(value, offset, undefined, encoding);
   offset += l;
   return offset;
@@ -160,6 +164,7 @@ function writeString16BE(buf, offset, value, encoding='utf8') {
   let l = Buffer.byteLength(value, encoding);
   buf.writeUInt16BE(l, offset);
   offset += 2;
+  value = value.padEnd(l, '\x00');
   buf.write(value, offset, undefined, encoding);
   offset += l;
   return offset;
@@ -169,6 +174,7 @@ function writeString32LE(buf, offset, value, encoding='utf8') {
   let l = Buffer.byteLength(value, encoding);
   buf.writeUInt32LE(l, offset);
   offset += 4;
+  value = value.padEnd(l, '\x00');
   buf.write(value, offset, undefined, encoding);
   offset += l;
   return offset;
@@ -178,6 +184,7 @@ function writeString32BE(buf, offset, value, encoding='utf8') {
   let l = Buffer.byteLength(value, encoding);
   buf.writeUInt32BE(l, offset);
   offset += 4;
+  value = value.padEnd(l, '\x00');
   buf.write(value, offset, undefined, encoding);
   offset += l;
   return offset;
@@ -185,6 +192,7 @@ function writeString32BE(buf, offset, value, encoding='utf8') {
 
 function writeZString(buf, offset, value, encoding='utf8') {
   let l = Buffer.byteLength(value, encoding);
+  value = value.padEnd(l-1, '\x00');
   buf.write(value, offset, undefined, encoding);
   offset += l;
   buf.writeUInt8(0, offset);
