@@ -62,6 +62,8 @@
 #define bigendian
 #define littleendian
 
+#define hidden
+
 #define transform(arg)
 
 struct TRANSFORM {}

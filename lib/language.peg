@@ -42,7 +42,7 @@ structfield_      <- transform? ws? type ws? ident length? ws? default:default? 
 type              <- (string_type / other_type) ws? %type
 
 other_type        <- modifier? modifier? modifier? ident %other_type
-modifier          <- ("unsigned" / "reversed" / transform) ws %modifier
+modifier          <- ("hidden" / "unsigned" / "reversed" / transform) ws %modifier
 transform         <- "transform(" ident ")" %transform
 
 string_type       <- (encoding? "string" / encoding? "cstring" / encoding? "char") ws %string_type
