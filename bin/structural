@@ -4,6 +4,11 @@ let structural = require('../lib/libstructural');
 let fs = require('fs');
 let nopt = require('nopt');
 
+const red = '\x1b[38;2;255;60;60m';
+const green = '\x1b[38;2;60;255;60m';
+const ok = green+'[ok]\x1b[0m';
+const error = red+'[error]\x1b[0m';
+
 /**
  * remove extension from a filename
  * @param {String} fn - the filename
@@ -27,6 +32,7 @@ exports.parseCLI = function parseCLI(...argv) {
 }
 
 exports.parse = function parse(args) {
+  if(!args.filename) return;
   try {
     if(args.language===undefined) args.language = 'js';
     if(args.out===undefined) args.out = removeExtension(args.filename)+'.'+args.language;
@@ -34,13 +40,13 @@ exports.parse = function parse(args) {
     let res = structural.parseFile(args.filename, args);
     fs.writeFileSync(args.out, res);
 
-    console.log('output written to '+args.out);
+    console.log(ok, 'output written to '+args.out);
 
     args.out = fs.realpathSync(args.out);
 
     if(args.language=='js') {
       let m = require(args.out);
-      console.log('syntax test succeeded');
+      console.log(ok, 'syntax test succeeded');
       let buf = Buffer.allocUnsafe(1000000);
       for(let key of Object.keys(m)) {
         if(key=='STRUCTURE') continue;
@@ -53,7 +59,7 @@ exports.parse = function parse(args) {
           let o = new cls(buf);
           o.size();
         } catch(e) {
-          console.error('Exception testing', key, e);
+          console.error(error, 'Exception testing', key, e);
           //console.error(e);
         }
         //if(!(cls.constructor!=Function)) continue;
@@ -61,6 +67,7 @@ exports.parse = function parse(args) {
       }
     }
   } catch (e) {
+    console.error(error, 'Parsing error', e);
     return e;
   }
 }
