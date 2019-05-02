@@ -63,6 +63,7 @@
 #define littleendian
 
 #define hidden
+#define computed int
 
 #define transform(arg)
 
