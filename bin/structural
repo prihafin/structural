@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 
-let structural = require('../lib/libstructural');
 let fs = require('fs');
 let nopt = require('nopt');
+let structural = require('../lib/libstructural');
 
 const red = '\x1b[38;2;255;60;60m';
 const green = '\x1b[38;2;60;255;60m';
@@ -23,7 +23,7 @@ function removeExtension(fn) {
 exports.parseCLI = function parseCLI(...argv) {
   let args = nopt({'out': String, 'language': String, 'parser':String}, {'o':'--out', 'l':'--language', 'p':'--parser'}, argv, 0);
   if(!args.filename) args.filename = args.argv.remain[0];
-  res = exports.parse(args);
+  let res = exports.parse(args);
 
   if(res) {
     console.error(res);
@@ -74,10 +74,11 @@ exports.parse = function parse(args) {
 
 if(require.main===module) {
   if(process.argv.length<3) {
-    let p = require('./../package.json');
+    // @ts-ignore
+    let p = require('../package.json');
     console.log('Structural version', p.version);
     console.log('usage: structural [--language|-l=js|py] definitions.h [--out|-o outfilename]');
-    return;
+    process.exit();
   }
 
   exports.parseCLI(...process.argv.slice(2));

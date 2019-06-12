@@ -67,4 +67,4 @@
 
 #define transform(arg)
 
-struct TRANSFORM {}
+struct TRANSFORM {};

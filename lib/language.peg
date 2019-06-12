@@ -17,6 +17,8 @@ filepath   <- [\w-./]*
 
 includekw  <- "#include" %null
 
+hidden     <- "hidden" %hidden
+
 include    <- includekw ws dqt filepath dqt %include
 sysinclude <- includekw ws lt filepath gt %sysinclude
 
@@ -24,8 +26,8 @@ constdecl  <- const decl eq ws? expression eol %constdecl
 
 namespacedecl <- namespace ws ident ws? "{" decls? ws? "}" %namespacedecl
 
-typedefstructdecl <- typedefstruct (ws transform)? (ws ident)? (ws (extends))? ws? "{" ws? structfields ws? "}" ws? idents? ws? eol ws? %typedefstructdecl
-structdecl        <- struct (ws transform)? (ws ident)? (ws extends)? ws? "{" ws? structfields ws? "}" ws? idents? ws? eol ws? %structdecl
+typedefstructdecl <- (hidden)? ws? typedefstruct (ws transform)? (ws ident)? (ws (extends))? ws? "{" ws? structfields ws? "}" ws? idents? ws? eol ws? %structdecl
+structdecl        <- (hidden)? ws? struct (ws transform)? (ws ident)? (ws (extends))? ws? "{" ws? structfields ws? "}" ws? idents? ws? eol ws? %structdecl
 extends           <- ":" ws? ident %extends
 structfields      <- ws? (structfield / lambdafield / switch / comment)+ ws? %structfields
 idents            <- ident ws? ("," ws? ident)* %idents
