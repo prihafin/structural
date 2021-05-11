@@ -78,6 +78,11 @@ Used files in this example:
 ```c
 // definitions.h
 
+// remember to set include path for the ide of choice
+// for vscode on windows it would be:
+// "C_Cpp.default.includePath": ["~/appdata/roaming/npm/node_modules/structural"]
+// in the settings.json file
+
 #include <definitions.h>
 
 // this include indicates that the used transformations
@@ -138,5 +143,3 @@ The CapitalizeA transformation will capitalize all the 'a' characters when readi
 ## Notes
 
 The parser definition is constructed with PEG grammar and uses canopy to create the js parser
-
-Definition file for the datatypes is available, in the root on the installed npm package. On windows the path would be `c:\users\[username]\AppData\Roaming\npm\node_modules\structural\definitions.h`
