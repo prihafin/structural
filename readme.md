@@ -2,7 +2,7 @@
 library to unify binary format declarations to a single c-like syntax
 
 ## install with
-`npm install git+http://[repository address]/asseri/structural -g`
+`npm install git+http://[repository address]/prihafin/structural -g`
 
 - note the -g to install it as global
 
@@ -47,7 +47,7 @@ default encoding is utf8
 
 each field can also be modified with `bigendian` or `littleendian` effectivly flipping each read/written byte around
 
-## examples
+## example header files
 
 ```c
 const uint32_t myconstant = 10;
@@ -70,6 +70,68 @@ typedef struct {
   simple embedded; // embedded struct
 } demo;
 ```
+
+## Transformation example
+
+Used files in this example:
+
+```c
+// definitions.h
+
+#include <definitions.h>
+
+// this include indicates that the used transformations
+// are locations in the file "transformations.js"
+#include "transformations.js"
+
+typedef struct TransformationTest {
+  transform(CapitalizaA) char text[20];
+};
+```
+
+```javascript
+// transformations.js
+
+exports.initialize = (structures, transforms, Transform) => {
+  transforms.CapitalizeA = class CapitalizeA extends Transform {
+    /** @param {String} value */
+    static get(value) {
+      return value.replace(/a/g, 'A');
+    }
+
+    /** @param {String} value */
+    static set(value) {
+      return value.replace(/A/g, 'a');
+    }
+  };
+};
+```
+
+```javascript
+// index.js
+
+const defs = require('./definitions');
+
+let test_data = Buffer.from('abcdefghijabcdefghij');
+
+let test_object = new defs.TransformationTest();
+
+test_object.read(test_data);
+console.log(test_object.text);
+
+test_object.text = 'And this goes both ways';
+test_object.write(test_data);
+console.log(test_data.toString());
+```
+
+Now, running `node index.js` would print out:
+
+```
+AbcdefghijAbcdefghij
+and this goes both ways
+```
+
+as the CapitalizeA transformation will capitalize all the 'a' characters when reading and then lowercase the 'A' characters when writing.
 
 ## Notes
 
