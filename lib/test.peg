@@ -1,0 +1,12 @@
+grammar TEST_GRAMMAR
+
+content <- decls
+decls   <- ident+ %decls
+
+ident   <- ident1 ident2* %ident #{}
+
+ident1  <- [a-z] / [A-Z] / [_]
+ident2  <- [a-z] / [A-Z] / [0-9] / [_] / [()]
+
+space   <- [\t ]+ %null
+ws      <- [\n\r\t ]+ %null

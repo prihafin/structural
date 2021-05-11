@@ -1,0 +1,1 @@
+nodemon -i language.js -i test.js -i test-input.py -i test-input.js -e * -w * run-test.js
