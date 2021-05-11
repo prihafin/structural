@@ -124,14 +124,16 @@ test_object.write(test_data);
 console.log(test_data.toString());
 ```
 
-Now, running `node index.js` would print out:
+Now, first run `structural definitions.h` to generate the javascript file `definitions.js` and then execute `node index.js`.
+
+The output would be:
 
 ```
 AbcdefghijAbcdefghij
 and this goes both ways
 ```
 
-as the CapitalizeA transformation will capitalize all the 'a' characters when reading and then lowercase the 'A' characters when writing.
+The CapitalizeA transformation will capitalize all the 'a' characters when reading and then lowercase the 'A' characters when writing.
 
 ## Notes
 
