@@ -1,7 +1,10 @@
 # structural
-library to unify binary format declarations to a single c-like syntax
+Library to unify binary format declarations to a single c-like syntax
+
+Written in JavaScript, requires [nodejs](https://nodejs.org/en/) installed on the target computer
 
 ## install with
+
 `npm install git+http://github.com/prihafin/structural -g`
 
 - note the -g to install it as global
