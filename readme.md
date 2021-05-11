@@ -2,7 +2,7 @@
 library to unify binary format declarations to a single c-like syntax
 
 ## install with
-`npm install git+http://[repository address]/prihafin/structural -g`
+`npm install git+http://github.com/prihafin/structural -g`
 
 - note the -g to install it as global
 
