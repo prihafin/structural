@@ -1,7 +1,7 @@
 Windows Registry Editor Version 5.00
 
 [HKEY_CLASSES_ROOT\VisualStudio.h.14.0\shell\Convert to Javascript]
-"Icon"="C:\\Users\\Asseri\\AppData\\Roaming\\npm\\node_modules\\structural\\bin\\javascript.ico"
+"Icon"="C:\\development\\private\\javascript\\structural\\bin\\javascript.ico"
 
 [HKEY_CLASSES_ROOT\VisualStudio.h.14.0\shell\Convert to Javascript\Command]
 @=hex(2):22,00,43,00,3a,00,5c,00,55,00,73,00,65,00,72,00,73,00,5c,00,61,00,73,\
@@ -12,7 +12,7 @@ Windows Registry Editor Version 5.00
   00,75,00,61,00,67,00,65,00,3d,00,6a,00,73,00,00,00
 
 [HKEY_CLASSES_ROOT\VisualStudio.h.14.0\shell\Convert to Python]
-"Icon"="C:\\Users\\Asseri\\AppData\\Roaming\\npm\\node_modules\\structural\\bin\\python.ico"
+"Icon"="C:\\development\\private\\javascript\\structural\\bin\\python.ico"
 
 [HKEY_CLASSES_ROOT\VisualStudio.h.14.0\shell\Convert to Python\Command]
 @=hex(2):22,00,43,00,3a,00,5c,00,55,00,73,00,65,00,72,00,73,00,5c,00,61,00,73,\
