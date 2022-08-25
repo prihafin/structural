@@ -47,6 +47,7 @@ exports.parse = function parse(args) {
     if(args.language=='js') {
       let m = require(args.out);
       console.log(ok, 'syntax test succeeded');
+
       let buf = Buffer.allocUnsafe(1000000);
       for(let key of Object.keys(m)) {
         if(key=='STRUCTURE') continue;
@@ -64,6 +65,13 @@ exports.parse = function parse(args) {
         }
         //if(!(cls.constructor!=Function)) continue;
         //console.log(cls.constructor.name, cls.__proto__.constructor.name);
+      }
+
+      console.log('\nList of structures processed:');
+
+      for(let [key,value] of Object.entries(m)) {
+        if(value.__proto__ !== m.Structure) continue;
+        console.log(key, 'size is', value.size(), 'bytes', '(0x'+value.size().toString(16)+' bytes)')
       }
     }
   } catch (e) {
